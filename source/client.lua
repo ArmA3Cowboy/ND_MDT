@@ -26,7 +26,7 @@ function OpenMDT(status)
             displayUnits(units)
         end)
         lib.callback("ND_MDT:get911Calls", false, function(emeregencyCalls)
-            displayUnits(emeregencyCalls)
+            display911Calls(emeregencyCalls)
         end)
     end
 
@@ -224,7 +224,7 @@ RegisterNUICallback("viewEmployees", function(data)
     end, data.search)
 end)
 
-RegisterNuiCallback("empoyeeAction", function(data, cb)
+RegisterNUICallback("empoyeeAction", function(data, cb)
     local charid, action, data = data.character, data.action, data.data
 
     if action == "rank" then
@@ -493,9 +493,10 @@ local function removeResponseBlipAndPoint()
     if DoesBlipExist(responseBlip) then
         RemoveBlip(responseBlip)
     end
+    responseBlip = nil
     if responseBlipPoint then
         responseBlipPoint:remove()
-        responseBlip = nil
+        responseBlipPoint = nil
     end
     responseBlipCall = 0
 end

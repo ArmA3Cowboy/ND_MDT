@@ -81,7 +81,7 @@ AddEventHandler("ND:characterUnloaded", function(src)
 end)
 
 -- This will just send all the current calls to the client.
-lib.callback.register("ND_MDT:getUnitStatus", function(source)
+lib.callback.register("ND_MDT:get911Calls", function(source)
     return emeregencyCalls
 end)
 
