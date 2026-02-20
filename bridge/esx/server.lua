@@ -75,7 +75,7 @@ function Bridge.nameSearch(src, first, last)
 
     local profiles = {}
     local firstname = (first or ""):lower()
-    local lastname = (last):lower()
+    local lastname = (last or ""):lower()
     local data = queryDatabaseProfiles(firstname, lastname)
 
     for k, v in pairs(data) do

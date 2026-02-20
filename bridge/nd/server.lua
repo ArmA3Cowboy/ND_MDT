@@ -55,7 +55,7 @@ function Bridge.nameSearch(src, first, last)
 
     local profiles = {}
     local firstname = (first or ""):lower()
-    local lastname = (last):lower()
+    local lastname = (last or ""):lower()
     local data = queryDatabaseProfiles(firstname, lastname)
 
     for k, v in pairs(data) do
@@ -82,7 +82,7 @@ function Bridge.characterSearch(source, characterSearched)
     if not config.policeAccess[player.job] then return false end
 
     local profiles = {}
-    local item = findCharacterById(id)
+    local item = findCharacterById(characterSearched)
 
     if not item then
         local result = MySQL.query.await("SELECT * FROM nd_characters WHERE charid = ?", {characterSearched})
