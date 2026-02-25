@@ -1,7 +1,8 @@
 local bridgeResources = {
     ["ND_Core"] = "nd",
     ["es_extended"] = "esx",
-    ["qb-core"] = "qb"
+    ["qb-core"] = "qb",
+    ["CBK_core"] = "cbk"
 }
 
 local function getBridge()
