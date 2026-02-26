@@ -3,6 +3,7 @@ local Bridge = {}
 
 SetTimeout(500, function()
     NDCore:loadSQL({
+        "bridge/nd/database/vehicles.sql",
         "bridge/nd/database/bolos.sql",
         "bridge/nd/database/records.sql",
         "bridge/nd/database/reports.sql",
