@@ -1,9 +1,8 @@
-local QBX = exports['qbx_core']:GetCoreObject()
 local Bridge = {}
 
 ---@return table
 function Bridge.getPlayerInfo()
-    local PlayerData = QBX.Functions.GetPlayerData()
+    local PlayerData = exports.qbx_core:GetPlayerData()
     local job = PlayerData.job or {}
     local charinfo = PlayerData.charinfo or {}
     local metadata = PlayerData.metadata or {}
@@ -26,7 +25,7 @@ end
 
 ---@return string
 function Bridge.rankName()
-    local job = QBX.Functions.GetPlayerData().job or {}
+    local job = exports.qbx_core:GetPlayerData().job or {}
     return (job.grade and job.grade.name) or ""
 end
 
