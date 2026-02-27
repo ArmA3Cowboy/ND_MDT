@@ -121,8 +121,6 @@ end
 
 -- Open the MDT using keymapping.
 RegisterCommand("+mdt", function()
-    local veh = GetVehiclePedIsIn(cache.ped)
-    if not DoesEntityExist(veh) or GetVehicleClass(veh) ~= 18 then return end
     OpenMDT(true)
 end, false)
 RegisterCommand("-mdt", function()end, false)
