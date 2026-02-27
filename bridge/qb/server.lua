@@ -1,4 +1,3 @@
-local QBX = exports['qbx_core']:GetCoreObject()
 local Bridge = {}
 
 SetTimeout(500, function()
@@ -17,7 +16,7 @@ SetTimeout(500, function()
 end)
 
 local function getPlayerSource(citizenid)
-    local players = QBX.Functions.GetQBPlayers()
+    local players = exports.qbx_core:GetQBPlayers()
     for src, player in pairs(players) do
         if player.citizenid == citizenid then
             return src
@@ -27,7 +26,7 @@ local function getPlayerSource(citizenid)
 end
 
 local function findCharacterById(citizenid)
-    return QBX.Functions.GetPlayerByCitizenId(citizenid)
+    return exports.qbx_core:GetPlayerByCitizenId(citizenid)
 end
 
 local function queryDatabaseProfiles(first, last)
@@ -61,7 +60,7 @@ end
 ---@param last string|nil
 ---@return table
 function Bridge.nameSearch(src, first, last)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player or not config.policeAccess[player.PlayerData.job.name] then return false end
 
     local firstname = (first or ""):lower()
@@ -80,7 +79,7 @@ end
 ---@param characterSearched string
 ---@return table
 function Bridge.characterSearch(source, characterSearched)
-    local player = QBX.Functions.GetPlayer(source)
+    local player = exports.qbx_core:GetPlayer(source)
     if not player or not config.policeAccess[player.PlayerData.job.name] then return false end
 
     local result = MySQL.query.await("SELECT citizenid, charinfo, metadata FROM players WHERE citizenid = ?", {characterSearched})
@@ -107,7 +106,7 @@ end
 ---@param src number
 ---@return table
 function Bridge.getPlayerInfo(src)
-    local player = QBX.Functions.GetPlayer(src) or {}
+    local player = exports.qbx_core:GetPlayer(src) or {}
     local charinfo = player.PlayerData and player.PlayerData.charinfo or {}
     local job = player.PlayerData and player.PlayerData.job or {}
     local metadata = player.PlayerData and player.PlayerData.metadata or {}
@@ -171,7 +170,7 @@ end
 ---@param data number|string
 ---@return table
 function Bridge.viewVehicles(src, searchBy, data)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player or not config.policeAccess[player.PlayerData.job.name] then return false end
 
     local vehicles = {}
@@ -291,7 +290,7 @@ end
 ---@param key any
 ---@param value any
 function Bridge.updatePlayerMetadata(source, characterId, key, value)
-    local player = QBX.Functions.GetPlayer(source)
+    local player = exports.qbx_core:GetPlayer(source)
     if player then
         player.Functions.SetMetaData(key, value)
     end
@@ -315,11 +314,11 @@ local function filterEmployeeSearch(charinfo, metadata, search)
 end
 
 function Bridge.viewEmployees(src, search)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player or not config.policeAccess[player.PlayerData.job.name] then return end
 
     local employees = {}
-    local onlinePlayers = QBX.Functions.GetQBPlayers()
+    local onlinePlayers = exports.qbx_core:GetQBPlayers()
     local result = MySQL.query.await("SELECT citizenid, charinfo, job, metadata FROM players")
 
     for i = 1, #result do
@@ -373,7 +372,7 @@ function Bridge.viewEmployees(src, search)
 end
 
 function Bridge.employeeUpdateCallsign(src, charid, callsign)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player then
         return false, "An issue occured try again later!"
     end
@@ -423,7 +422,7 @@ function Bridge.employeeUpdateCallsign(src, charid, callsign)
 end
 
 function Bridge.updateEmployeeRank(src, update)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player then
         return false, "An issue occured try again later!"
     end
@@ -435,7 +434,7 @@ function Bridge.updateEmployeeRank(src, update)
         return false, "You can't set employees higher rank than you!"
     end
 
-    local jobData = QBX.Shared.Jobs[update.job]
+    local jobData = exports.qbx_core:GetJobs()[update.job]
     if not jobData then
         return false, "Job not found!"
     end
@@ -491,7 +490,7 @@ function Bridge.updateEmployeeRank(src, update)
 end
 
 function Bridge.removeEmployeeJob(src, charid)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player then
         return false, "An issue occured try again later!"
     end
@@ -542,10 +541,10 @@ function Bridge.removeEmployeeJob(src, charid)
 end
 
 function Bridge.invitePlayerToJob(src, target)
-    local player = QBX.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if not player or not player.PlayerData.job.name then return end
 
-    local targetPlayer = QBX.Functions.GetPlayer(target)
+    local targetPlayer = exports.qbx_core:GetPlayer(target)
     if not targetPlayer then return end
 
     targetPlayer.Functions.SetJob(player.PlayerData.job.name, 0)
@@ -557,7 +556,7 @@ function Bridge.ComparePlates(plate1, plate2)
 end
 
 lib.callback.register("ND_MDT:getRanks", function(src, jobName)
-    local jobData = QBX.Shared.Jobs[jobName]
+    local jobData = exports.qbx_core:GetJobs()[jobName]
     if not jobData then return nil end
     return jobData.grades
 end)
