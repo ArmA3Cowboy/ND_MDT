@@ -232,9 +232,11 @@ end)
 
 exports.ox_inventory:registerHook("createItem", function(payload)
     local metadata = payload.metadata
-    if payload.item.weapon and metadata.registered then
+    if Bridge and payload.item.weapon and metadata.registered then
         local player = Bridge.getPlayerInfo(payload.inventoryId)
-        MySQL.insert("INSERT INTO `nd_mdt_weapons` (`character`, `weapon`, `serial`, `owner_name`) VALUES (?, ?, ?, ?)", {player.characterId, payload.item.label, metadata.serial, metadata.registered})
+        if player and player.characterId then
+            MySQL.insert("INSERT INTO `nd_mdt_weapons` (`character`, `weapon`, `serial`, `owner_name`) VALUES (?, ?, ?, ?)", {player.characterId, payload.item.label, metadata.serial, metadata.registered})
+        end
     end
     return metadata
 end)
